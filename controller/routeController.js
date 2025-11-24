@@ -16,6 +16,7 @@ export const quotesController = async (req, res) => {
         $(".quote").each((i, el) => {
             const text = $(el).find(".text").text();
             const author = $(el).find(".author").text();
+            const tags = $(el).find(".tags .tag").map((i, tag) => $(tag).text()).get();
     
             results.push({ text, author, tags });
         });
@@ -34,7 +35,8 @@ export const pokemonController = async (req, res) => {
         const $ = cheerio.load(response.data);
     
         const name = $("h1").text().trim();
-    
+
+        const title = $('.vitals-table').prevAll('h2').first().text().trim();
         const tableRows = $(".vitals-table tr");
         const natNumber = $(tableRows[0]).find("td").text().trim();
         const types = $(tableRows[1]).find("td a").map((i, el) => $(el).text().trim()).get();
@@ -45,6 +47,7 @@ export const pokemonController = async (req, res) => {
     
         res.json({
             name,
+            title,
             natNumber,
             types,
             species,
@@ -53,6 +56,25 @@ export const pokemonController = async (req, res) => {
             abilities
         });
     } 
+    catch (err) {
+        res.json(err);
+    }
+}
+
+export const prcController = async (req, res) => {
+    const url = 'https://cpdas.prc.gov.ph/public/index.aspx'
+
+    let results = [];
+    try {
+        const response = await axios.get(url);
+        const $ = cheerio.load(response.data);
+
+        const title = $(sort).find('.jakson h4 b').text().trim();
+        results.push({ title });
+
+        console.log(results);
+        res.json(results);
+    }
     catch (err) {
         res.json(err);
     }
