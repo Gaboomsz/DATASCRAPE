@@ -25,13 +25,14 @@ export const quotesController = async (req, res) => {
 } 
 
 export const pokemonController = async (req, res) => {
-    const url = "https://pokemondb.net/pokedex/charmander";
-    try {
-        const response = await axios.get(url);
-        const $ = cheerio.load(response.data);
-    
-        const name = $("h1").text().trim();
+    const pokemonName = 'pikachu';
+    const url = `https://pokemondb.net/pokedex/${pokemonName}`;
 
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
+
+    const name = $('h1').first().text().trim();
+    try {
         let pokedexData = {};
         const pokedexHeader = $('h2:contains("Pokédex data")');
         const pokedexTable = pokedexHeader.next('.vitals-table');
