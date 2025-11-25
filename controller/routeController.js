@@ -68,11 +68,15 @@ export const pokemonController = async (req, res) => {
             trainingData[title] = data;
         });
 
+        const PokemonDetails = {};
+        PokemonDetails[name] = {
+            "Pokédex data": pokedexData,
+            "Training": trainingData
+        };
         res.json({
-            name,
-            pokedexData,
-            trainingData
+            PokemonDetails
         });
+
     }
     catch (err) {
         res.json(err);
